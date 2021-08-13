@@ -1,0 +1,34 @@
+#git init - inizializaciya lokalnii repozitorii v tekuchee papke
+#git status - proverka tekuchego sostoyaniya repozitoriya
+#git add - dobavlenie filov v kommit
+#git add . - dobavlenie vseh filov
+#git add put_do_faila - dobalenie konkretnih filov
+#changes to be committed - faili, kotorie budut v versiu
+#untracked changes - faili, kototrie ostautsya vne versii
+#git commit - sozdanie kommita (versii)
+#git commit -m 'nazvanie kommita'
+#git push - otpravka lokalnih kommitov v hranilishe na udalennie repozitori
+#git push nazvanie_repozitoriya nazvanie_vetki
+
+#git remote - rabota s udalennimi repozitoriyami
+#git remote add - privyazka udalennogo repozitoriya
+#git remote add nazvanie ssilka_na_repozitorii
+#git remote -v - spisok privyazannih udalennih repozitorii
+#git remote rm nazvanie #iskluchenie udalennogo repozitoriya
+
+#git branch - rabota s vetkami
+#git branch - prosmotr vseh vetok (aktivnaya vetka pomechaetsya * i drugim cvetom)
+#git branch nazvanie_vetki -sozdanie novoi vetki
+#git branch -D nazvanie_vetki - udalenie vetkigit checkout nazvanie_vetki - perehod na vetku
+git checkout -b nazvanaie_vetki sozdanie vetki i perehod na nee
+
+#git pull - poluchenie izmenenie iz udalennogo repozitoriya
+#git pull nazvanie_repozitoriya nazvaniya_vetki
+
+#git stash - pryachet izmeneniya
+#git stash apply - vozvrazhaet spryatonnie izmeneniya
+
+
+
+
+
