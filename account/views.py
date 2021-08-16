@@ -34,11 +34,14 @@ class LogoutView(APIView):
         return Response('vi uspeshno zaregistrirovalis')
 
 class ChangePasswordView(APIView):
+    permisiion_classes = [IsAuthenticated]
     def post(self, request):
-        serializer = ChangePasswordSerializer(data=request.data)
+        serializer = ChangePasswordSerializer(data=request.data, context=
+        {'request':request})
         if serializer.is_valid(raise_exception=True):
             serializer.set_new_password()
-            return Response('parol uspeshno obnovlen')
+            return Response('Parol uspeshno obnovlen')
+
 
 class ForgotPasswordView(APIView):
     def post(self, request):
@@ -52,7 +55,4 @@ class ForgotPasswordCompleteView(APIView):
         serializer = ForgotPassCompleteSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.send_new_passord()
-            return Response('parol usepeshno obnovlen')
-
-
-class ForgotPasswordCompleteView(APIView):
+            return Response('parol uspeshno obnovlen')
