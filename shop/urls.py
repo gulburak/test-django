@@ -22,7 +22,7 @@ from product.views import (ProductViewSet, ReviewViewSet)
 
 router = DefaultRouter()
 router.register('products', ProductViewSet)
-router.register('products', ReviewViewSet)
+router.register('reviews', ReviewViewSet)
 
 
 from product.views import (ProductViewSet, ReviewViewSet)

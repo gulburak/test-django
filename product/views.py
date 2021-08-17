@@ -11,8 +11,8 @@ from product.models import Product, ProductReview
 from product.permissions import IsAuthorOrIsAdmin
 from product.serializers import (ProductSerializer, ProductDetailsSerializer, CreateProductSerializer, ReviewSerializer)
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
-
-
+from django_filters import rest_framework as filters
+from rest_framework import filters as rest_filters
 def test_view(request):
     return HttpResponse('hello world')
 
@@ -60,9 +60,35 @@ def test_view(request):
     #     serializer = self.get_serializer(data=data, context={'request':request})
     #     serializer.is_valid(raise_exception=True)
     #     return Response(serializer.data, status=281)
+class ProductFilter(filters.FilterSet):
+    price_from = filters.NumberFilter('price', 'gte')
+    price_to = filters.NumberFilter('price', 'lte')
+
+    class Meta:
+        model = Product
+        fields = ('price_from', 'price_to')
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
+    filter_backends = [filters.DjangoFilterBackend, rest_filters.SearchFilter, rest_filters.OrderingFilter]
+    #filterset_fields = ['price']
+    filterset_class = ProductFilter
+    search_fields = ['title', 'description']
+    ordering_fields = ['title', 'price']
+
+
+    #api/v1/products/
+    #api/v1/products/?price_from=10000&price_to=15000
+
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     print(queryset)
+    #     print(self.request.query_params)
+    #     price_from = self.request.query_params.get('price_from')
+    #     price_to = self.request.query_params.get('price_to')
+    #     queryset = queryset.filter(price__gte=price_from, price__lte=price_to)
+    #     return queryset
+
     def get_serializer_class(self):
         if self.action == 'list':
             return ProductSerializer
@@ -70,7 +96,7 @@ class ProductViewSet(viewsets.ModelViewSet):
             return ProductDetailsSerializer
         return CreateProductSerializer
     def get_permissions(self):
-        if self.action in ['create', 'update', 'partial_update', 'destroy' ]:
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
             return [IsAdminUser()]
         return []
     #api/v1/products/id
@@ -82,12 +108,11 @@ class ProductViewSet(viewsets.ModelViewSet):
         reviews = product.reviews.all()
         serializer = ReviewSerializer(reviews, many=True)
         return Response(serializer.data, status=200)
-# sozdanie, redaktirovanie, udalenie
 
 #sozdaet otziv tolko zaloginenni polzovatel
 #redaktorivat ili udalyat mozhet libo admin, libo author
-class ReviewViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, mixins.GenericViewSet):
-    queryset = ProductViewSet.objects.all()
+class ReviewViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    queryset = Product.objects.all()
     serializer_class = ReviewSerializer
 
     def get_permissions(self):
@@ -96,17 +121,22 @@ class ReviewViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.Des
         elif self.actiion in ['update', 'partial_update', 'destroy']:
             return [IsAuthenticated(), IsAuthorOrIsAdmin()]
         return []
-
+#CRUD(Create, Retrive, Update, )
+#
 # TODO: ViewSet dlya otzivov, listing budet v tovarah, detalei net
 # TODO: sozdavat, redaktirovat i udalyat producti mogut bit tolko admini
 # TODO: poginaciya(razbivka listinga na stranici)
 # TODO: filtraciya
 # TODO: poisk productov po nazvaniu i opisaniu
-# TODO: ogranichenie kolichestva zaprosov
-# TODO: testi
 # TODO: Otzivi
 # TODO: Razobrat vzaimodeistvie
 
+# TODO: ogranichenie kolichestva zaprosov
+# TODO: testi
+# TODO: documentaciya
+# TODO: README
+
+#python3 manage.py loaddata fixtures.json
 #REST - arhitekturnii podhod
 # 1. model klienta - server
 # 2. otsutstvie sostoyaniya

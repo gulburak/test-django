@@ -20,8 +20,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-p+xx04gh#@pb8lfit1+lg_i^2ui^&7$oy0&#p@ud=q9q!9e^or'
-
+SECRET_KEY = ''
+# TODO: spyatat vse vashnie peremennie v env
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -40,10 +40,12 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework.authtoken',
+    'django_filters',
 
     'account',
     'order',
     'product',
+
 ]
 
 MIDDLEWARE = [
@@ -140,5 +142,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication'
-    ]
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 5,
+
 }
